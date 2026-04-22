@@ -798,7 +798,7 @@
 
 <footer>
   <span class="footer-logo">Jeremy Elay Srankota — Lubeník, Slovakia</span>
-  <span class="footer-copy">© 2025 — All rights reserved</span>
+  <span class="footer-copy">© 2026 — All rights reserved</span>
 </footer>
 
 <script>
@@ -862,7 +862,7 @@ document.getElementById('contactForm').addEventListener('submit', async e => {
   status.textContent = 'Sending...';
   const data = Object.fromEntries(new FormData(e.target));
   try {
-    const res = await fetch('https://YOUR-WORKER.workers.dev/contact', {
+    const res = await fetch('https://jes-portfolio.jeremyelaysrankota.workers.dev', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
