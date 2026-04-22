@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeremy Elay Srankota — Photographer & Filmmaker</title>
+<meta name="description" content="Jeremy Elay Srankota — Cinematic photographer based in Lubeník, Slovakia. Weddings, portraits, automotive, travel, and commercial work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  /* ─── RESET & BASE ─── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg:       #0a0714;
+    --bg2:      #0f0b1c;
+    --bg3:      #140d26;
+    --purple:   #2d1b4e;
+    --accent:   #6d4aff;
+    --accent2:  #9d7fff;
+    --text:     #f0ecff;
+    --muted:    #7a6fa0;
+    --dim:      #3a2e5c;
+    --border:   rgba(109,74,255,0.12);
+    --serif:    'Playfair Display', Georgia, serif;
+    --sans:     'DM Sans', sans-serif;
+  }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--dim); }
+
+  /* ─── CURSOR ─── */
+  .cursor {
+    position: fixed; width: 8px; height: 8px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: width .3s, height .3s, background .3s;
+  }
+  .cursor-ring {
+    position: fixed; width: 38px; height: 38px;
+    border: 1px solid rgba(109,74,255,.4); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: width .3s, height .3s, border-color .3s;
+  }
+  .cursor.big { width: 4px; height: 4px; }
+  .cursor-ring.big { width: 56px; height: 56px; border-color: rgba(109,74,255,.7); }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    padding: 2rem 5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: background .5s, padding .5s;
+  }
+  nav.scrolled { background: rgba(10,7,20,.92); backdrop-filter: blur(12px); padding: 1.2rem 5rem; }
+  .nav-logo {
+    font-family: var(--serif); font-size: 1rem; font-weight: 300;
+    letter-spacing: .18em; color: var(--text); text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: .65rem; letter-spacing: .22em; text-transform: uppercase;
+    transition: color .3s; cursor: none;
+  }
+  .nav-links a:hover { color: var(--accent2); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: none; }
+  .hamburger span { display: block; width: 24px; height: 1px; background: var(--text); transition: .3s; }
+
+  /* ─── HERO ─── */
+  .hero {
+    height: 100vh; position: relative;
+    display: flex; align-items: center; overflow: hidden;
+    background: var(--bg);
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 60% 40%, #2d1b4e 0%, #0a0714 65%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: .06;
+    background-image:
+      linear-gradient(rgba(109,74,255,.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(109,74,255,.5) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  .hero-vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(10,7,20,.9) 100%);
+  }
+  .hero-img-block {
+    position: absolute; right: 0; top: 0; bottom: 0; width: 52%;
+    clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+    overflow: hidden;
+  }
+  .hero-img-block svg { width: 100%; height: 100%; object-fit: cover; }
+  .hero-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, var(--bg) 0%, transparent 35%),
+                linear-gradient(to top, var(--bg) 0%, transparent 25%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 5rem; max-width: 55%;
+  }
+  .hero-eyebrow {
+    font-size: .62rem; letter-spacing: .35em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeup .9s .4s forwards;
+  }
+  .hero-name {
+    font-family: var(--serif); font-size: clamp(3rem, 6vw, 6rem);
+    font-weight: 300; line-height: 1.04; margin-bottom: 2rem;
+    opacity: 0; animation: fadeup .9s .7s forwards;
+  }
+  .hero-name em { font-style: italic; color: var(--accent2); }
+  .hero-tagline {
+    font-size: .9rem; color: var(--muted); letter-spacing: .06em;
+    line-height: 1.75; max-width: 360px;
+    opacity: 0; animation: fadeup .9s 1s forwards;
+  }
+  .hero-cta {
+    display: inline-block; margin-top: 3rem;
+    font-size: .62rem; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--text); text-decoration: none; cursor: none;
+    padding: .9rem 2.5rem;
+    border: 1px solid rgba(109,74,255,.4);
+    position: relative; overflow: hidden;
+    transition: border-color .4s, color .4s;
+    opacity: 0; animation: fadeup .9s 1.3s forwards;
+  }
+  .hero-cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--accent), #4a2fd4);
+    transform: translateX(-101%); transition: transform .4s cubic-bezier(.7,0,.3,1);
+  }
+  .hero-cta:hover::before { transform: translateX(0); }
+  .hero-cta span { position: relative; z-index: 1; }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 5rem;
+    display: flex; align-items: center; gap: 1rem;
+    opacity: 0; animation: fadeup .9s 1.8s forwards;
+  }
+  .hero-scroll span { font-size: .58rem; letter-spacing: .3em; text-transform: uppercase; color: var(--dim); }
+  .scroll-track { width: 60px; height: 1px; background: var(--dim); position: relative; overflow: hidden; }
+  .scroll-fill { position: absolute; inset: 0; background: var(--accent); animation: scrolltrack 2s ease-in-out infinite; }
+  @keyframes scrolltrack { 0%{transform:translateX(-100%)} 50%{transform:translateX(0)} 100%{transform:translateX(100%)} }
+  @keyframes fadeup { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ─── SECTIONS SHARED ─── */
+  .section-tag {
+    font-size: .58rem; letter-spacing: .35em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: .8rem; display: block;
+  }
+  .section-heading {
+    font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.6rem);
+    font-weight: 300; line-height: 1.1; color: var(--text);
+  }
+  .section-heading em { font-style: italic; color: var(--accent2); }
+  .divider {
+    height: 1px; margin: 0 5rem;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+  }
+  .fade-in { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── PORTFOLIO ─── */
+  .portfolio { padding: 8rem 5rem; }
+  .portfolio-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .filters { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .filter-btn {
+    background: none; border: none; font-family: var(--sans);
+    font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--dim); cursor: none; padding: 0; transition: color .3s;
+  }
+  .filter-btn.active, .filter-btn:hover { color: var(--accent2); }
+  .filter-btn.active { border-bottom: 1px solid var(--accent); padding-bottom: 2px; }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+  }
+  .gi { position: relative; overflow: hidden; background: var(--bg2); cursor: none; }
+  .gi:nth-child(1) { grid-column: span 7; aspect-ratio: 16/10; }
+  .gi:nth-child(2) { grid-column: span 5; aspect-ratio: 3/4; }
+  .gi:nth-child(3) { grid-column: span 4; aspect-ratio: 4/5; }
+  .gi:nth-child(4) { grid-column: span 5; aspect-ratio: 16/10; }
+  .gi:nth-child(5) { grid-column: span 3; aspect-ratio: 4/5; }
+  .gi:nth-child(6) { grid-column: span 4; aspect-ratio: 4/5; }
+  .gi:nth-child(7) { grid-column: span 5; aspect-ratio: 16/10; }
+  .gi:nth-child(8) { grid-column: span 3; aspect-ratio: 4/5; }
+  .gi svg { width: 100%; height: 100%; display: block; transition: transform .8s cubic-bezier(.25,.46,.45,.94); }
+  .gi:hover svg { transform: scale(1.06); }
+  .gi-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,7,20,.85) 0%, transparent 55%);
+    opacity: 0; transition: opacity .4s;
+  }
+  .gi:hover .gi-overlay { opacity: 1; }
+  .gi-label {
+    position: absolute; bottom: 1.2rem; left: 1.2rem;
+    font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--text); opacity: 0; transform: translateY(6px);
+    transition: opacity .4s, transform .4s;
+  }
+  .gi:hover .gi-label { opacity: 1; transform: translateY(0); }
+
+  /* Lightbox */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 500;
+    background: rgba(10,7,20,.97); align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox-inner { max-width: 90vw; max-height: 90vh; position: relative; }
+  .lightbox-inner svg { max-width: 90vw; max-height: 85vh; display: block; }
+  .lightbox-close {
+    position: absolute; top: -2.5rem; right: 0;
+    font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--muted); cursor: none; background: none; border: none;
+    font-family: var(--sans); transition: color .3s;
+  }
+  .lightbox-close:hover { color: var(--accent2); }
+
+  /* ─── ABOUT ─── */
+  .about {
+    padding: 8rem 5rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 7rem; align-items: center;
+  }
+  .about-img { position: relative; }
+  .about-img-frame {
+    aspect-ratio: 3/4; overflow: hidden; background: var(--bg2);
+    position: relative;
+  }
+  .about-img-frame svg { width: 100%; height: 100%; display: block; transition: transform 1s; }
+  .about-img-frame:hover svg { transform: scale(1.04); }
+  .about-accent {
+    position: absolute; top: -1.5rem; right: -1.5rem;
+    width: 55%; height: 55%;
+    border: 1px solid rgba(109,74,255,.2); pointer-events: none;
+  }
+  .about-num {
+    position: absolute; bottom: 1.5rem; right: -3.5rem;
+    font-family: var(--serif); font-size: 7rem; font-weight: 300;
+    color: rgba(109,74,255,.06); line-height: 1; pointer-events: none;
+  }
+  .about-quote {
+    font-family: var(--serif); font-size: 1.15rem; font-style: italic;
+    color: var(--accent2); line-height: 1.65;
+    border-left: 1px solid rgba(109,74,255,.35); padding-left: 1.5rem;
+    margin: 2rem 0;
+  }
+  .about-text { font-size: .875rem; line-height: 1.95; color: var(--muted); margin-bottom: 1.4rem; }
+  .about-stats {
+    display: flex; gap: 3rem; margin-top: 3rem;
+    padding-top: 2rem; border-top: 1px solid var(--border);
+  }
+  .stat-n { font-family: var(--serif); font-size: 2.8rem; font-weight: 300; display: block; color: var(--text); }
+  .stat-l { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--dim); }
+
+  /* ─── SERVICES ─── */
+  .services { padding: 8rem 5rem; }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--border); margin-top: 4rem;
+  }
+  .svc {
+    padding: 3rem 2rem; border-right: 1px solid var(--border);
+    transition: background .4s;
+  }
+  .svc:last-child { border-right: none; }
+  .svc:hover { background: rgba(109,74,255,.04); }
+  .svc-num {
+    font-family: var(--serif); font-size: 3.5rem; font-weight: 300;
+    color: rgba(109,74,255,.14); line-height: 1; margin-bottom: 2rem; display: block;
+  }
+  .svc-title {
+    font-family: var(--serif); font-size: 1.3rem; font-weight: 300;
+    color: var(--text); margin-bottom: 1rem;
+  }
+  .svc-desc { font-size: .78rem; line-height: 1.85; color: var(--dim); }
+
+  /* ─── TRAVEL ─── */
+  .travel { padding: 8rem 0; }
+  .travel-hdr {
+    padding: 0 5rem; margin-bottom: 5rem;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .travel-intro { font-size: .875rem; color: var(--dim); line-height: 1.85; max-width: 380px; }
+  .travel-row {
+    display: flex; gap: 1.5rem; padding: 0 5rem;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .travel-row::-webkit-scrollbar { display: none; }
+  .tcard {
+    flex: 0 0 34vw; max-width: 480px; position: relative; cursor: none; text-decoration: none;
+  }
+  .tcard-img { aspect-ratio: 3/4; overflow: hidden; position: relative; background: var(--bg2); }
+  .tcard-img svg { width: 100%; height: 100%; display: block; transition: transform .9s cubic-bezier(.25,.46,.45,.94); }
+  .tcard:hover .tcard-img svg { transform: scale(1.07); }
+  .tcard-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,7,20,.9) 0%, transparent 50%);
+  }
+  .tcard-svg-decor {
+    position: absolute; bottom: 5rem; left: 50%; transform: translateX(-50%);
+    opacity: .25; transition: opacity .4s;
+  }
+  .tcard:hover .tcard-svg-decor { opacity: .5; }
+  .tcard-info { padding: 1.6rem 0 0; }
+  .tcard-country {
+    font-family: var(--serif); font-size: 2rem; font-weight: 300;
+    color: var(--text); margin-bottom: .3rem; display: block;
+  }
+  .tcard-desc { font-size: .75rem; color: var(--dim); }
+  .tcard-link {
+    display: inline-block; margin-top: 1rem;
+    font-size: .58rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--accent2);
+    border-bottom: 1px solid rgba(109,74,255,.3); padding-bottom: .2rem;
+    transition: color .3s, border-color .3s;
+  }
+  .tcard:hover .tcard-link { color: var(--text); border-color: var(--accent2); }
+
+  /* ─── CONTACT ─── */
+  .contact {
+    padding: 8rem 5rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 7rem; align-items: start;
+  }
+  .contact-email {
+    font-family: var(--serif); font-size: 1.5rem; font-weight: 300;
+    color: var(--accent2); text-decoration: none; display: block;
+    margin: 2rem 0; border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem; transition: color .3s;
+  }
+  .contact-email:hover { color: var(--text); }
+  .contact-social {
+    font-size: .62rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--dim); text-decoration: none; transition: color .3s;
+  }
+  .contact-social:hover { color: var(--accent2); }
+  .contact-note { font-size: .85rem; color: var(--dim); line-height: 1.85; margin-top: 2.5rem; }
+
+  .form-field { margin-bottom: 2rem; }
+  .form-field label {
+    display: block; font-size: .58rem; letter-spacing: .25em;
+    text-transform: uppercase; color: var(--dim); margin-bottom: .7rem;
+  }
+  .form-field input, .form-field textarea {
+    width: 100%; background: none; border: none;
+    border-bottom: 1px solid var(--border); padding: .8rem 0;
+    font-family: var(--sans); font-size: .9rem; color: var(--text);
+    outline: none; transition: border-color .3s; resize: none;
+  }
+  .form-field input::placeholder, .form-field textarea::placeholder { color: var(--dim); }
+  .form-field input:focus, .form-field textarea:focus { border-color: rgba(109,74,255,.5); }
+  .form-field textarea { height: 100px; }
+  .form-status { font-size: .78rem; color: var(--accent2); margin-top: 1rem; min-height: 1.2rem; }
+  .btn-submit {
+    background: none; border: 1px solid rgba(109,74,255,.35);
+    color: var(--accent2); font-family: var(--sans); font-weight: 300;
+    font-size: .62rem; letter-spacing: .25em; text-transform: uppercase;
+    padding: 1rem 2.5rem; cursor: none; transition: all .4s; position: relative; overflow: hidden;
+  }
+  .btn-submit::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--accent), #4a2fd4);
+    transform: translateX(-101%); transition: transform .4s cubic-bezier(.7,0,.3,1);
+  }
+  .btn-submit:hover::before { transform: translateX(0); }
+  .btn-submit:hover { color: #fff; border-color: var(--accent); }
+  .btn-submit span { position: relative; z-index: 1; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 2.5rem 5rem; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo { font-family: var(--serif); font-size: .85rem; color: var(--dim); }
+  .footer-copy { font-size: .58rem; letter-spacing: .15em; color: var(--dim); opacity: .5; }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 1.5rem 2rem; }
+    nav.scrolled { padding: 1rem 2rem; }
+    .nav-links { display: none; flex-direction: column; gap: 1.5rem; position: fixed; inset: 0; background: rgba(10,7,20,.97); align-items: center; justify-content: center; }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    .hero-content { padding: 0 2rem; max-width: 100%; }
+    .hero-img-block { display: none; }
+    .hero-scroll { left: 2rem; }
+    .portfolio, .about, .services, .contact { padding: 5rem 2rem; }
+    .portfolio-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    .grid { gap: .6rem; }
+    .gi:nth-child(n) { grid-column: span 12; aspect-ratio: 4/3; }
+    .about { grid-template-columns: 1fr; gap: 3rem; }
+    .about-num { display: none; }
+    .services-grid { grid-template-columns: 1fr 1fr; border-top: none; gap: 0; }
+    .svc { border-right: none; border-top: 1px solid var(--border); }
+    .travel-hdr { flex-direction: column; align-items: flex-start; gap: 1.5rem; padding: 0 2rem; }
+    .travel-row { padding: 0 2rem; }
+    .tcard { flex: 0 0 82vw; }
+    .contact { grid-template-columns: 1fr; gap: 3rem; }
+    .divider { margin: 0 2rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<nav id="nav">
+  <a href="#" class="nav-logo">J E S</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#portfolio">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#travel">Travel</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-img-block">
+    <svg viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="hBg" cx="45%" cy="35%">
+          <stop offset="0%" stop-color="#2d1b4e"/>
+          <stop offset="60%" stop-color="#120a22"/>
+          <stop offset="100%" stop-color="#0a0714"/>
+        </radialGradient>
+      </defs>
+      <rect width="800" height="1000" fill="url(#hBg)"/>
+      <ellipse cx="300" cy="350" rx="160" ry="220" fill="#1e1038" opacity=".6"/>
+      <ellipse cx="550" cy="600" rx="120" ry="90" fill="#2d1b4e" opacity=".4"/>
+      <line x1="0" y1="500" x2="800" y2="500" stroke="#6d4aff" stroke-opacity=".04" stroke-width="1"/>
+      <rect x="80" y="80" width="640" height="840" fill="none" stroke="#6d4aff" stroke-opacity=".06" stroke-width="1"/>
+      <text x="400" y="510" text-anchor="middle" font-family="Georgia" font-size="12" fill="#9d7fff" fill-opacity=".15" letter-spacing="6">YOUR HERO PHOTO HERE</text>
+    </svg>
+    <div class="hero-img-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Photographer &amp; Filmmaker — Slovakia</p>
+    <h1 class="hero-name">
+      Jeremy<br>
+      <em>Elay</em><br>
+      Srankota
+    </h1>
+    <p class="hero-tagline">Chasing moments,<br>wherever the light feels right.</p>
+    <a href="#portfolio" class="hero-cta"><span>View Work</span></a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-track"><div class="scroll-fill"></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PORTFOLIO -->
+<section class="portfolio" id="portfolio">
+  <div class="portfolio-header fade-in">
+    <div>
+      <span class="section-tag">Selected Work</span>
+      <h2 class="section-heading">Portfolio</h2>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="weddings">Weddings</button>
+      <button class="filter-btn" data-cat="portraits">Portraits</button>
+      <button class="filter-btn" data-cat="cars">Cars</button>
+      <button class="filter-btn" data-cat="landscape">Landscape</button>
+      <button class="filter-btn" data-cat="commercial">Commercial</button>
+    </div>
+  </div>
+  <div class="grid fade-in">
+    <!-- Each .gi has data-cat for filtering. Replace SVGs with <img> tags pointing to real photos. -->
+    <div class="gi" data-cat="landscape" onclick="openLightbox(this)">
+      <svg viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="l1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#140a28"/><stop offset="100%" stop-color="#1e1038"/></linearGradient></defs>
+        <rect width="700" height="440" fill="url(#l1)"/>
+        <ellipse cx="350" cy="220" rx="220" ry="140" fill="#2d1b4e" opacity=".5"/>
+        <text x="350" y="225" text-anchor="middle" font-family="Georgia" font-size="11" fill="#9d7fff" fill-opacity=".25" letter-spacing="4">LANDSCAPE</text>
+      </svg>
+      <div class="gi-overlay"></div>
+      <span class="gi-label">Landscape</span>
+    </div>
+    <div class="gi" data-cat="portraits" onclick="openLightbox(this)">
+      <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="l2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0f0a1f"/><stop offset="100%" stop-color="#1a0e32"/></linearGradient></defs>
+        <rect width="400" height="530" fill="url(#l2)"/>
+        <ellipse cx="200" cy="200" rx="90" ry="120" fill="#2d1b4e" opacity=".6"/>
+        <text x="200" y="280" text-anchor="middle" font-family="Georgia" font-size="11" fill="#9d7fff" fill-opacity=".25" letter-spacing="4">PORTRAIT</text>
+      </svg>
+      <div class="gi-overlay"></div>
+      <span class="gi-label">Portrait</span>
+    </div>
+    <div class="gi" data-cat="cars" onclick="openLightbox(this)">
+      <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="400" height="500" fill="#0c0820"/>
+        <ellipse cx="200" cy="280" rx="170" ry="60" fill="#1e1038" opacity=".7"/>
+        <rect x="80" y="200" width="240" height="80" rx="8" fill="#1a0e32" opacity=".5"/>
+        <text x="200" y="260" text-anchor="middle" font-family="Georgia" font-size="11" fill="#9d7fff" fill-opacity=".25" letter-spacing="4">AUTOMOTIVE</text>
+      </svg>
+      <div class="gi-overlay"></div>
+      <span class="gi-label">Automotive</span>
+    </div>
+    <div class="gi" data-cat="weddings" onclick="openLightbox(this)">
+      <svg viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="l3" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#12082a"/><stop offset="100%" stop-color="#1e1040"/></linearGradient></defs>
+        <rect width="700" height="440" fill="url(#l3)"/>
+        <ellipse cx="350" cy="200" rx="200" ry="130" fill="#2d1b4e" opacity=".5"/>
+        <text x="350" y="225" text-anchor="middle" font-family="Georgia" font-size="11" fill="#9d7fff" fill-opacity=".25" letter-spacing="4">WEDDING</text>
+      </svg>
+      <div class="gi-overlay"></div>
+      <span class="gi-label">Wedding</span>
+    </div>
+    <div class="gi" data-cat="commercial" onclick="openLightbox(this)">
+      <svg viewBox="0 0 300 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="300" height="500" fill="#100c20"/>
+        <ellipse cx="150" cy="220" rx="90" ry="110" fill="#1e1038" opacity=".6"/>
+        <text x="150" y="280" text-anchor="middle" font-family="Georgia" font-size="11" fill="#9d7fff" fill-opacity=".25" letter-spacing="4">COMMERCIAL</text>
+      </svg>
+      <div class="gi-overlay"></div>
+      <span class="gi-label">Commercial</span>
+    </div>
+    <div class="gi" data-cat="portraits" onclick="openLightbox(this)">
+      <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="400" height="500" fill="#0e0a20"/>
+        <ellipse cx="200" cy="230" rx="130" ry="100" fill="#2d1b4e" opacity=".5"/>
+        <text x="200" y="270" text-anchor="middle" font-family="Georgia" font-size="11" fill="#9d7fff" fill-opacity=".25" letter-spacing="4">FASHION</text>
+      </svg>
+      <div class="gi-overlay"></div>
+      <span class="gi-label">Fashion</span>
+    </div>
+    <div class="gi" data-cat="landscape" onclick="openLightbox(this)">
+      <svg viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="700" height="440" fill="#0a0718"/>
+        <ellipse cx="400" cy="200" rx="250" ry="100" fill="#1e1038" opacity=".5"/>
+        <text x="350" y="230" text-anchor="middle" font-family="Georgia" font-size="11" fill="#9d7fff" fill-opacity=".25" letter-spacing="4">LANDSCAPE</text>
+      </svg>
+      <div class="gi-overlay"></div>
+      <span class="gi-label">Landscape</span>
+    </div>
+    <div class="gi" data-cat="cars" onclick="openLightbox(this)">
+      <svg viewBox="0 0 300 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="300" height="500" fill="#0c0820"/>
+        <ellipse cx="150" cy="270" rx="120" ry="50" fill="#1a1030" opacity=".7"/>
+        <text x="150" y="270" text-anchor="middle" font-family="Georgia" font-size="11" fill="#9d7fff" fill-opacity=".25" letter-spacing="4">CARS</text>
+      </svg>
+      <div class="gi-overlay"></div>
+      <span class="gi-label">Cars</span>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <button class="lightbox-close" onclick="closeLightbox()">Close ×</button>
+    <div id="lightboxContent"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-img fade-in">
+    <div class="about-img-frame">
+      <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg">
+        <defs><radialGradient id="aBg" cx="40%" cy="35%"><stop offset="0%" stop-color="#2d1b4e"/><stop offset="100%" stop-color="#0f0a1f"/></radialGradient></defs>
+        <rect width="400" height="530" fill="url(#aBg)"/>
+        <ellipse cx="190" cy="200" rx="110" ry="140" fill="#1e1038" opacity=".6"/>
+        <rect x="20" y="20" width="360" height="490" fill="none" stroke="#6d4aff" stroke-opacity=".07" stroke-width="1"/>
+        <text x="200" y="280" text-anchor="middle" font-family="Georgia" font-size="11" fill="#9d7fff" fill-opacity=".2" letter-spacing="4">JEREMY</text>
+      </svg>
+    </div>
+    <div class="about-accent"></div>
+    <div class="about-num">16</div>
+  </div>
+  <div class="fade-in">
+    <span class="section-tag">About</span>
+    <h2 class="section-heading">A lens pointed<br>at <em>everything</em></h2>
+    <blockquote class="about-quote">"I don't photograph categories — I photograph feelings."</blockquote>
+    <p class="about-text">I'm Jeremy. Sixteen years old, German by roots, Slovak by circumstance. I arrived in Lubeník as a missionary and discovered something I didn't expect — the time and space to really look at the world around me.</p>
+    <p class="about-text">My work moves across landscapes, weddings, portraits, cars, fashion, and events. Not because I'm trying to cover every genre — but because I haven't found a reason to stop at just one. Photography and film are how I process the places I end up in, the people I meet, the light I find.</p>
+    <p class="about-text">I'm 16. I'm still learning. And I think that's exactly why I still notice things that others have already stopped seeing.</p>
+    <div class="about-stats">
+      <div><span class="stat-n">3+</span><span class="stat-l">Countries</span></div>
+      <div><span class="stat-n">6</span><span class="stat-l">Disciplines</span></div>
+      <div><span class="stat-n">∞</span><span class="stat-l">Left to see</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="fade-in">
+    <span class="section-tag">What I offer</span>
+    <h2 class="section-heading">Services</h2>
+  </div>
+  <div class="services-grid fade-in">
+    <div class="svc">
+      <span class="svc-num">01</span>
+      <h3 class="svc-title">Weddings</h3>
+      <p class="svc-desc">Quiet moments, golden light, real emotion. I document your day the way it actually felt — not the posed version of it.</p>
+    </div>
+    <div class="svc">
+      <span class="svc-num">02</span>
+      <h3 class="svc-title">Portraits</h3>
+      <p class="svc-desc">Minimal direction, maximum authenticity. I find the version of you that doesn't perform for the camera.</p>
+    </div>
+    <div class="svc">
+      <span class="svc-num">03</span>
+      <h3 class="svc-title">Automotive</h3>
+      <p class="svc-desc">Machines with character deserve light that treats them like art. Cinematic, precise, moody — cars as they deserve to be seen.</p>
+    </div>
+    <div class="svc">
+      <span class="svc-num">04</span>
+      <h3 class="svc-title">Commercial</h3>
+      <p class="svc-desc">Intentional visuals for brands that care how they're perceived. Built around your identity, not a template.</p>
+    </div>
+    <div class="svc">
+      <span class="svc-num">05</span>
+      <h3 class="svc-title">Events</h3>
+      <p class="svc-desc">The energy of a room, preserved. I move quietly through events, catching what happens between the planned moments.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TRAVEL -->
+<section class="travel" id="travel">
+  <div class="travel-hdr fade-in">
+    <div>
+      <span class="section-tag">Personal Projects</span>
+      <h2 class="section-heading">Journeys</h2>
+    </div>
+    <p class="travel-intro">Beyond commissions, I follow curiosity. Each country becomes a short visual essay — an attempt to understand a place through its light, texture, and pace.</p>
+  </div>
+  <div class="travel-row">
+
+    <!-- JAPAN -->
+    <a class="tcard fade-in" href="travel-japan.html">
+      <div class="tcard-img">
+        <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="jBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d0f18"/><stop offset="100%" stop-color="#181c2a"/></linearGradient></defs>
+          <rect width="400" height="530" fill="url(#jBg)"/>
+          <ellipse cx="200" cy="260" rx="140" ry="110" fill="#1a1e2e" opacity=".6"/>
+          <!-- Torii gate preview -->
+          <g fill="none" stroke="#bc3a3a" stroke-width="2" opacity=".4" transform="translate(140,140) scale(0.7)">
+            <rect x="0" y="40" width="170" height="8" rx="2"/>
+            <rect x="10" y="20" width="150" height="8" rx="2"/>
+            <rect x="20" y="28" width="4" height="12"/>
+            <rect x="146" y="28" width="4" height="12"/>
+            <rect x="20" y="48" width="4" height="80"/>
+            <rect x="146" y="48" width="4" height="80"/>
+          </g>
+        </svg>
+        <div class="tcard-img-overlay"></div>
+      </div>
+      <div class="tcard-info">
+        <span class="tcard-country">Japan</span>
+        <p class="tcard-desc">Quiet temples, neon alleys, and the space between both.</p>
+        <span class="tcard-link">Explore Series →</span>
+      </div>
+    </a>
+
+    <!-- CROATIA -->
+    <a class="tcard fade-in" href="travel-croatia.html">
+      <div class="tcard-img">
+        <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="cBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0e1610"/><stop offset="100%" stop-color="#121e14"/></linearGradient></defs>
+          <rect width="400" height="530" fill="url(#cBg)"/>
+          <ellipse cx="200" cy="320" rx="180" ry="60" fill="#162018" opacity=".5"/>
+          <ellipse cx="160" cy="200" rx="70" ry="90" fill="#0e1810" opacity=".6"/>
+          <!-- Wave SVG -->
+          <path d="M20 340 Q80 310 140 340 Q200 370 260 340 Q320 310 380 340" stroke="#4a8fa0" stroke-width="1.5" fill="none" opacity=".35"/>
+          <path d="M20 360 Q80 330 140 360 Q200 390 260 360 Q320 330 380 360" stroke="#4a8fa0" stroke-width="1.5" fill="none" opacity=".25"/>
+        </svg>
+        <div class="tcard-img-overlay"></div>
+      </div>
+      <div class="tcard-info">
+        <span class="tcard-country">Croatia</span>
+        <p class="tcard-desc">Adriatic light, limestone coasts, salt in the air.</p>
+        <span class="tcard-link">Explore Series →</span>
+      </div>
+    </a>
+
+    <!-- GREECE -->
+    <a class="tcard fade-in" href="travel-greece.html">
+      <div class="tcard-img">
+        <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#181208"/><stop offset="100%" stop-color="#201808"/></linearGradient></defs>
+          <rect width="400" height="530" fill="url(#gBg)"/>
+          <ellipse cx="200" cy="250" rx="160" ry="110" fill="#2a1e08" opacity=".5"/>
+          <!-- Sun SVG -->
+          <circle cx="200" cy="200" r="28" fill="none" stroke="#d4a017" stroke-width="1.5" opacity=".3"/>
+          <circle cx="200" cy="200" r="16" fill="#d4a017" opacity=".15"/>
+          <line x1="200" y1="162" x2="200" y2="150" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+          <line x1="228" y1="172" x2="236" y2="164" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+          <line x1="238" y1="200" x2="250" y2="200" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+          <line x1="228" y1="228" x2="236" y2="236" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+          <line x1="200" y1="238" x2="200" y2="250" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+          <line x1="172" y1="228" x2="164" y2="236" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+          <line x1="162" y1="200" x2="150" y2="200" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+          <line x1="172" y1="172" x2="164" y2="164" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+        </svg>
+        <div class="tcard-img-overlay"></div>
+      </div>
+      <div class="tcard-info">
+        <span class="tcard-country">Greece</span>
+        <p class="tcard-desc">White walls, ancient light, the color of stone at noon.</p>
+        <span class="tcard-link">Explore Series →</span>
+      </div>
+    </a>
+
+    <!-- COMING SOON -->
+    <a class="tcard fade-in" href="#" style="opacity:.35;pointer-events:none">
+      <div class="tcard-img">
+        <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <rect width="400" height="530" fill="#0c0818"/>
+          <rect x="170" y="210" width="60" height="80" fill="none" stroke="#6d4aff" stroke-opacity=".2" stroke-width="1"/>
+          <line x1="200" y1="230" x2="200" y2="210" stroke="#6d4aff" stroke-opacity=".15" stroke-width="1"/>
+          <text x="200" y="330" text-anchor="middle" font-family="Georgia" font-size="10" fill="#6d4aff" fill-opacity=".2" letter-spacing="3">COMING SOON</text>
+        </svg>
+        <div class="tcard-img-overlay"></div>
+      </div>
+      <div class="tcard-info">
+        <span class="tcard-country" style="color:#2d1b4e">Next</span>
+        <p class="tcard-desc" style="color:#1a1030">Still being discovered...</p>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="fade-in">
+    <span class="section-tag">Get in touch</span>
+    <h2 class="section-heading">Let's make<br><em>something real</em></h2>
+    <a href="mailto:jeresranki@gmail.com" class="contact-email">jeresranki@gmail.com</a>
+    <a href="https://instagram.com/jeresranki" target="_blank" class="contact-social">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:middle;margin-right:.5rem">
+        <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+      </svg>
+      @jeresranki
+    </a>
+    <p class="contact-note">Whether it's a commission, a collaboration, or just curiosity — I'm open. Based in Slovakia, available to travel.</p>
+  </div>
+  <div class="fade-in">
+    <form id="contactForm">
+      <div class="form-field">
+        <label>Name</label>
+        <input type="text" name="name" placeholder="Your name" required>
+      </div>
+      <div class="form-field">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="your@email.com" required>
+      </div>
+      <div class="form-field">
+        <label>Message</label>
+        <textarea name="message" placeholder="Tell me about the project..." required></textarea>
+      </div>
+      <button type="submit" class="btn-submit"><span>Send Message</span></button>
+      <p class="form-status" id="formStatus"></p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">Jeremy Elay Srankota — Lubeník, Slovakia</span>
+  <span class="footer-copy">© 2025 — All rights reserved</span>
+</footer>
+
+<script>
+// Cursor
+const cur = document.getElementById('cur');
+const curR = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function anim() { rx+=(mx-rx)*.12; ry+=(my-ry)*.12; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(anim); })();
+document.querySelectorAll('a,button,.gi,.tcard').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.classList.add('big'); curR.classList.add('big'); });
+  el.addEventListener('mouseleave', () => { cur.classList.remove('big'); curR.classList.remove('big'); });
+});
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Mobile menu
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+
+// Fade in on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+// Filters
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.cat;
+    document.querySelectorAll('.gi').forEach(gi => {
+      gi.style.display = (cat === 'all' || gi.dataset.cat === cat) ? '' : 'none';
+    });
+  });
+});
+
+// Lightbox
+function openLightbox(el) {
+  const svg = el.querySelector('svg').cloneNode(true);
+  svg.style.maxWidth = '80vw';
+  document.getElementById('lightboxContent').innerHTML = '';
+  document.getElementById('lightboxContent').appendChild(svg);
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+
+// Contact form
+document.getElementById('contactForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const status = document.getElementById('formStatus');
+  status.textContent = 'Sending...';
+  const data = Object.fromEntries(new FormData(e.target));
+  try {
+    const res = await fetch('https://YOUR-WORKER.workers.dev/contact', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (res.ok) { status.textContent = 'Message sent. I\'ll be in touch.'; e.target.reset(); }
+    else { status.textContent = 'Something went wrong. Email me directly.'; }
+  } catch {
+    status.textContent = 'Network error. Please email jeresranki@gmail.com directly.';
+  }
+});
+</script>
+</body>
+</html>

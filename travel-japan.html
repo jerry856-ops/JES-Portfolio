@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan — Jeremy Elay Srankota</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@200;300;400&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg:     #f7f5f2;
+    --bg2:    #ede9e2;
+    --dark:   #0e0c0a;
+    --red:    #8b1a1a;
+    --red2:   #bc3a3a;
+    --muted:  #6a6460;
+    --dim:    #b0aa9e;
+    --border: rgba(139,26,26,0.12);
+    --serif:  'Playfair Display', 'Noto Serif JP', Georgia, serif;
+    --sans:   'DM Sans', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--dark); font-family: var(--sans); font-weight: 300; overflow-x: hidden; cursor: none; }
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--dim); }
+
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--red2); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .3s, height .3s; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(139,26,26,.3); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width .3s, height .3s; }
+  .cursor.big { width: 4px; height: 4px; }
+  .cursor-ring.big { width: 54px; height: 54px; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 2rem 5rem; display: flex; justify-content: space-between; align-items: center;
+    transition: background .4s;
+  }
+  nav.scrolled { background: rgba(247,245,242,.95); backdrop-filter: blur(10px); }
+  .nav-back {
+    font-size: .62rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; transition: color .3s; cursor: none;
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .nav-back:hover { color: var(--red2); }
+  .nav-logo { font-family: var(--serif); font-size: .95rem; letter-spacing: .15em; color: var(--dark); }
+
+  /* HERO */
+  .hero {
+    height: 100vh; position: relative;
+    display: flex; align-items: flex-end; overflow: hidden;
+    background: var(--dark);
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, #1a0808 0%, #0e0c0a 70%);
+  }
+  .hero-torii {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    opacity: .12;
+  }
+  .hero-content {
+    position: relative; z-index: 2; padding: 0 5rem 6rem;
+    display: flex; justify-content: space-between; align-items: flex-end; width: 100%;
+  }
+  .hero-title { font-family: var(--serif); }
+  .hero-jp { font-size: 4rem; font-weight: 300; color: #bc3a3a; opacity: .6; display: block; line-height: 1; margin-bottom: .5rem; }
+  .hero-en { font-size: clamp(3.5rem, 7vw, 6.5rem); font-weight: 300; color: #f7f5f2; line-height: 1; }
+  .hero-meta { text-align: right; }
+  .hero-tagline { font-size: .8rem; color: #6a5a5a; letter-spacing: .08em; line-height: 1.8; max-width: 280px; }
+  .hero-year { font-family: var(--serif); font-size: 5rem; color: rgba(188,58,58,.08); display: block; line-height: 1; }
+  .hero-scroll-line { position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%); width: 1px; height: 60px; background: linear-gradient(to bottom, #bc3a3a, transparent); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:.2;transform:translateX(-50%) scaleY(.5)} 50%{opacity:1;transform:translateX(-50%) scaleY(1)} }
+
+  /* INTRO */
+  .intro { padding: 7rem 5rem; max-width: 680px; }
+  .intro-tag { font-size: .58rem; letter-spacing: .35em; text-transform: uppercase; color: var(--red2); margin-bottom: 1.2rem; display: block; }
+  .intro-text { font-family: var(--serif); font-size: clamp(1.3rem, 2.5vw, 1.8rem); font-weight: 300; line-height: 1.6; color: var(--dark); }
+  .intro-body { font-size: .9rem; line-height: 1.95; color: var(--muted); margin-top: 2rem; max-width: 500px; }
+
+  /* DIVIDER */
+  .divider { height: 1px; margin: 0 5rem; background: linear-gradient(to right, transparent, var(--border), transparent); }
+
+  /* GALLERY */
+  .gallery { padding: 5rem; }
+  .gallery-grid { columns: 3; gap: 1rem; }
+  .gallery-item { break-inside: avoid; margin-bottom: 1rem; overflow: hidden; position: relative; cursor: none; }
+  .gallery-item svg { width: 100%; display: block; transition: transform .7s cubic-bezier(.25,.46,.45,.94); }
+  .gallery-item:hover svg { transform: scale(1.04); }
+  .gallery-item-caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 1rem 1.2rem;
+    background: linear-gradient(to top, rgba(14,12,10,.8) 0%, transparent 100%);
+    font-size: .65rem; letter-spacing: .12em; color: #f7f5f2;
+    opacity: 0; transition: opacity .4s;
+  }
+  .gallery-item:hover .gallery-item-caption { opacity: 1; }
+
+  /* FEATURE SPREAD */
+  .feature { padding: 0 5rem 6rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .feature-quote {
+    font-family: var(--serif); font-size: 1.4rem; font-style: italic;
+    color: var(--red2); line-height: 1.65;
+    border-left: 2px solid rgba(139,26,26,.25); padding-left: 1.5rem;
+  }
+  .feature-body { font-size: .875rem; line-height: 1.95; color: var(--muted); }
+
+  /* BACK LINK */
+  .back-section { padding: 5rem; text-align: center; }
+  .back-link {
+    font-size: .62rem; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; transition: color .3s; cursor: none;
+    border-bottom: 1px solid var(--border); padding-bottom: .3rem;
+  }
+  .back-link:hover { color: var(--red2); border-color: var(--red2); }
+
+  /* FOOTER */
+  footer { padding: 2rem 5rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .footer-txt { font-size: .6rem; letter-spacing: .12em; color: var(--dim); }
+
+  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.5rem 2rem; }
+    .hero-content { padding: 0 2rem 4rem; flex-direction: column; align-items: flex-start; gap: 2rem; }
+    .hero-meta { text-align: left; }
+    .intro, .gallery, .feature, .back-section { padding: 4rem 2rem; }
+    .gallery-grid { columns: 2; }
+    .feature { grid-template-columns: 1fr; gap: 2rem; }
+    .divider { margin: 0 2rem; }
+    footer { padding: 2rem; flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-back">
+    <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.2"><line x1="14" y1="5" x2="2" y2="5"/><polyline points="6,1 2,5 6,9"/></svg>
+    Back
+  </a>
+  <span class="nav-logo">J E S — Japan</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <!-- Full torii gate SVG element -->
+  <svg class="hero-torii" width="340" height="400" viewBox="0 0 340 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Kasagi (top curved beam) -->
+    <path d="M10 80 Q170 40 330 80" stroke="#bc3a3a" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <!-- Nuki (lower crossbar) -->
+    <rect x="40" y="115" width="260" height="12" rx="3" fill="#bc3a3a"/>
+    <!-- Shimaki ends -->
+    <rect x="4" y="73" width="30" height="10" rx="2" fill="#bc3a3a"/>
+    <rect x="306" y="73" width="30" height="10" rx="2" fill="#bc3a3a"/>
+    <!-- Komaishi caps -->
+    <rect x="54" y="109" width="12" height="18" rx="2" fill="#bc3a3a"/>
+    <rect x="274" y="109" width="12" height="18" rx="2" fill="#bc3a3a"/>
+    <!-- Left pillar -->
+    <rect x="56" y="127" width="12" height="270" rx="3" fill="#bc3a3a"/>
+    <!-- Right pillar -->
+    <rect x="272" y="127" width="12" height="270" rx="3" fill="#bc3a3a"/>
+    <!-- Nuki connectors -->
+    <line x1="62" y1="115" x2="62" y2="127" stroke="#bc3a3a" stroke-width="12"/>
+    <line x1="278" y1="115" x2="278" y2="127" stroke="#bc3a3a" stroke-width="12"/>
+  </svg>
+  <div class="hero-content">
+    <div class="hero-title">
+      <span class="hero-jp">日本</span>
+      <span class="hero-en">Japan</span>
+    </div>
+    <div class="hero-meta">
+      <p class="hero-tagline">Between the ancient and the electric — a country that holds contradiction beautifully.</p>
+      <span class="hero-year">2024</span>
+    </div>
+  </div>
+  <div class="hero-scroll-line"></div>
+</section>
+
+<!-- INTRO -->
+<section class="intro fade-in">
+  <span class="intro-tag">Visual Essay — Japan</span>
+  <p class="intro-text">"I expected chaos. I found silence underneath it — a country that knows how to hold stillness and spectacle in the same breath."</p>
+  <p class="intro-body">Japan arrived before I was ready for it. Every frame was a negotiation between wanting to document everything and knowing that restraint would serve the images better. The light here has weight — morning mist in Kyoto, blue neon in Shinjuku, the particular gold of late afternoon on temple wood.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- GALLERY GRID -->
+<section class="gallery">
+  <div class="gallery-grid">
+    <!-- Replace SVGs with <img src="path/to/photo.jpg"> when adding real photos -->
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="j1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d0f18"/><stop offset="100%" stop-color="#181c2a"/></linearGradient></defs>
+        <rect width="400" height="500" fill="url(#j1)"/>
+        <ellipse cx="200" cy="220" rx="120" ry="100" fill="#1a1e2e" opacity=".7"/>
+        <text x="200" y="260" text-anchor="middle" font-family="Georgia" font-size="10" fill="#e8e4f0" fill-opacity=".2" letter-spacing="3">KYOTO TEMPLE</text>
+      </svg>
+      <div class="gallery-item-caption">Fushimi Inari at dusk</div>
+    </div>
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="300" fill="#12101e"/>
+        <ellipse cx="200" cy="140" rx="150" ry="80" fill="#1e1c30" opacity=".6"/>
+        <text x="200" y="155" text-anchor="middle" font-family="Georgia" font-size="10" fill="#e8e4f0" fill-opacity=".2" letter-spacing="3">SHINJUKU NIGHT</text>
+      </svg>
+      <div class="gallery-item-caption">Shinjuku, 23:00</div>
+    </div>
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="600" fill="#0e0c18"/>
+        <ellipse cx="200" cy="280" rx="100" ry="140" fill="#181530" opacity=".7"/>
+        <text x="200" y="310" text-anchor="middle" font-family="Georgia" font-size="10" fill="#e8e4f0" fill-opacity=".2" letter-spacing="3">PORTRAIT</text>
+      </svg>
+      <div class="gallery-item-caption">Morning light, Asakusa</div>
+    </div>
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="400" fill="#101018"/>
+        <ellipse cx="200" cy="190" rx="140" ry="100" fill="#1c1a2e" opacity=".6"/>
+        <text x="200" y="210" text-anchor="middle" font-family="Georgia" font-size="10" fill="#e8e4f0" fill-opacity=".2" letter-spacing="3">STREET</text>
+      </svg>
+      <div class="gallery-item-caption">Dotonbori, Osaka</div>
+    </div>
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="j2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a0c14"/><stop offset="100%" stop-color="#161828"/></linearGradient></defs>
+        <rect width="400" height="300" fill="url(#j2)"/>
+        <ellipse cx="200" cy="140" rx="160" ry="80" fill="#1a1c2a" opacity=".5"/>
+        <text x="200" y="155" text-anchor="middle" font-family="Georgia" font-size="10" fill="#e8e4f0" fill-opacity=".2" letter-spacing="3">LANDSCAPE</text>
+      </svg>
+      <div class="gallery-item-caption">Arashiyama bamboo</div>
+    </div>
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="500" fill="#0c0e1a"/>
+        <ellipse cx="200" cy="240" rx="110" ry="130" fill="#141630" opacity=".6"/>
+        <text x="200" y="260" text-anchor="middle" font-family="Georgia" font-size="10" fill="#e8e4f0" fill-opacity=".2" letter-spacing="3">ARCHITECTURE</text>
+      </svg>
+      <div class="gallery-item-caption">Senso-ji, Tokyo</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE SPREAD -->
+<section class="feature fade-in">
+  <blockquote class="feature-quote">"Japan taught me that the most powerful images often live in the gap between what you expected and what you actually found."</blockquote>
+  <div>
+    <p class="feature-body">I shot almost everything on the streets — not the tourist paths but the spaces between them. The small shrines wedged between convenience stores. The old woman hanging laundry above a ramen shop. The salary man sleeping standing up on the Yamanote Line. Japan rewards patience in a way that few places do.</p>
+    <p class="feature-body" style="margin-top:1.5rem">If I had to describe the trip in a single image: it would be early morning in Fushimi Inari, the orange gates still wet from rain, fog cutting the light into layers. No one else there. That's Japan when it drops its guard.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<div class="back-section">
+  <a href="index.html#travel" class="back-link">← Back to all journeys</a>
+</div>
+
+<footer>
+  <span class="footer-txt">Jeremy Elay Srankota — Japan Series</span>
+  <span class="footer-txt">jeresranki@gmail.com</span>
+</footer>
+
+<script>
+const cur = document.getElementById('cur'), curR = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function a(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(a); })();
+document.querySelectorAll('a,.gallery-item').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.classList.add('big'); curR.classList.add('big'); });
+  el.addEventListener('mouseleave', () => { cur.classList.remove('big'); curR.classList.remove('big'); });
+});
+window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60));
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} }), {threshold:.08});
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

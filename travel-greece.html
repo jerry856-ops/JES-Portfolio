@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greece — Jeremy Elay Srankota</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg:     #faf8f4;
+    --bg2:    #f0ece4;
+    --dark:   #18140e;
+    --blue:   #1e4a8a;
+    --blue2:  #3a6abf;
+    --sun:    #c8900a;
+    --muted:  #7a6e58;
+    --dim:    #c0b89e;
+    --border: rgba(30,74,138,0.1);
+    --serif:  'Playfair Display', Georgia, serif;
+    --sans:   'DM Sans', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--dark); font-family: var(--sans); font-weight: 300; overflow-x: hidden; cursor: none; }
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--dim); }
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--blue2); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .3s, height .3s; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(30,74,138,.3); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width .3s, height .3s; }
+  .cursor.big { width: 4px; height: 4px; }
+  .cursor-ring.big { width: 54px; height: 54px; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 2rem 5rem; display: flex; justify-content: space-between; align-items: center; transition: background .4s; }
+  nav.scrolled { background: rgba(250,248,244,.95); backdrop-filter: blur(10px); }
+  .nav-back { font-size: .62rem; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .3s; cursor: none; display: flex; align-items: center; gap: .6rem; }
+  .nav-back:hover { color: var(--blue2); }
+  .nav-logo { font-family: var(--serif); font-size: .95rem; letter-spacing: .15em; color: var(--dark); }
+
+  /* HERO — bright, airy, sunlit */
+  .hero {
+    height: 100vh; position: relative;
+    display: flex; align-items: flex-end; overflow: hidden;
+    background: linear-gradient(160deg, #f4ece0 0%, #e8d8b8 30%, #d4c090 60%, #b8a460 100%);
+  }
+  .hero-sun {
+    position: absolute; right: 15%; top: 20%;
+  }
+  .hero-content { position: relative; z-index: 2; padding: 0 5rem 6rem; display: flex; justify-content: space-between; align-items: flex-end; width: 100%; }
+  .hero-title { font-family: var(--serif); }
+  .hero-sub { font-size: 1rem; font-weight: 300; color: var(--blue); opacity: .6; display: block; line-height: 1; margin-bottom: .5rem; letter-spacing: .2em; text-transform: uppercase; }
+  .hero-en { font-size: clamp(3.5rem, 7vw, 6.5rem); font-weight: 300; color: var(--dark); line-height: 1; }
+  .hero-tagline { font-size: .8rem; color: var(--muted); letter-spacing: .08em; line-height: 1.8; max-width: 280px; text-align: right; }
+  .hero-scroll-line { position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%); width: 1px; height: 60px; background: linear-gradient(to bottom, var(--blue2), transparent); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:.2;transform:translateX(-50%) scaleY(.5)} 50%{opacity:1;transform:translateX(-50%) scaleY(1)} }
+
+  .intro { padding: 7rem 5rem; max-width: 680px; }
+  .intro-tag { font-size: .58rem; letter-spacing: .35em; text-transform: uppercase; color: var(--blue2); margin-bottom: 1.2rem; display: block; }
+  .intro-text { font-family: var(--serif); font-size: clamp(1.3rem, 2.5vw, 1.8rem); font-weight: 300; line-height: 1.6; color: var(--dark); }
+  .intro-body { font-size: .9rem; line-height: 1.95; color: var(--muted); margin-top: 2rem; max-width: 500px; }
+  .divider { height: 1px; margin: 0 5rem; background: linear-gradient(to right, transparent, var(--border), transparent); }
+
+  .gallery { padding: 5rem; }
+  .gallery-grid { columns: 3; gap: 1rem; }
+  .gallery-item { break-inside: avoid; margin-bottom: 1rem; overflow: hidden; position: relative; cursor: none; }
+  .gallery-item svg { width: 100%; display: block; transition: transform .7s cubic-bezier(.25,.46,.45,.94); }
+  .gallery-item:hover svg { transform: scale(1.04); }
+  .gallery-item-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem 1.2rem; background: linear-gradient(to top, rgba(24,20,14,.75) 0%, transparent 100%); font-size: .65rem; letter-spacing: .12em; color: #faf8f4; opacity: 0; transition: opacity .4s; }
+  .gallery-item:hover .gallery-item-caption { opacity: 1; }
+
+  .feature { padding: 0 5rem 6rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .feature-quote { font-family: var(--serif); font-size: 1.4rem; font-style: italic; color: var(--blue); line-height: 1.65; border-left: 2px solid rgba(30,74,138,.2); padding-left: 1.5rem; }
+  .feature-body { font-size: .875rem; line-height: 1.95; color: var(--muted); }
+
+  /* Greece-specific: white + blue palette strip */
+  .palette-strip { margin: 0 5rem 4rem; height: 2px; background: linear-gradient(to right, var(--blue), var(--blue2), #87ceeb, #fff); opacity: .3; }
+
+  .back-section { padding: 5rem; text-align: center; }
+  .back-link { font-size: .62rem; letter-spacing: .28em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .3s; cursor: none; border-bottom: 1px solid var(--border); padding-bottom: .3rem; }
+  .back-link:hover { color: var(--blue2); border-color: var(--blue2); }
+
+  footer { padding: 2rem 5rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .footer-txt { font-size: .6rem; letter-spacing: .12em; color: var(--dim); }
+  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.5rem 2rem; }
+    .hero-content { padding: 0 2rem 4rem; flex-direction: column; align-items: flex-start; gap: 2rem; }
+    .hero-tagline { text-align: left; }
+    .hero-sun { right: 5%; top: 15%; }
+    .intro, .gallery, .feature, .back-section { padding: 4rem 2rem; }
+    .gallery-grid { columns: 2; }
+    .feature { grid-template-columns: 1fr; gap: 2rem; }
+    .divider, .palette-strip { margin: 0 2rem; margin-bottom: 0; }
+    .palette-strip { margin-bottom: 2rem; }
+    footer { padding: 2rem; flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-back">
+    <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.2"><line x1="14" y1="5" x2="2" y2="5"/><polyline points="6,1 2,5 6,9"/></svg>
+    Back
+  </a>
+  <span class="nav-logo">J E S — Greece</span>
+</nav>
+
+<section class="hero">
+  <!-- Large sun SVG element -->
+  <svg class="hero-sun" width="280" height="280" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg" opacity=".25">
+    <circle cx="140" cy="140" r="60" fill="#c8900a"/>
+    <circle cx="140" cy="140" r="80" fill="none" stroke="#c8900a" stroke-width="1"/>
+    <circle cx="140" cy="140" r="105" fill="none" stroke="#c8900a" stroke-width=".5" stroke-dasharray="6 10"/>
+    <!-- Rays -->
+    <g stroke="#c8900a" stroke-width="1.5" stroke-linecap="round">
+      <line x1="140" y1="20" x2="140" y2="5"/>
+      <line x1="196" y1="36" x2="206" y2="24"/>
+      <line x1="232" y1="84" x2="244" y2="76"/>
+      <line x1="248" y1="140" x2="263" y2="140"/>
+      <line x1="232" y1="196" x2="244" y2="204"/>
+      <line x1="196" y1="232" x2="206" y2="244"/>
+      <line x1="140" y1="248" x2="140" y2="263"/>
+      <line x1="84" y1="232" x2="76" y2="244"/>
+      <line x1="48" y1="196" x2="36" y2="204"/>
+      <line x1="32" y1="140" x2="17" y2="140"/>
+      <line x1="48" y1="84" x2="36" y2="76"/>
+      <line x1="84" y1="48" x2="76" y2="36"/>
+    </g>
+  </svg>
+  <div class="hero-content">
+    <div class="hero-title">
+      <span class="hero-sub">Aegean Light</span>
+      <span class="hero-en">Greece</span>
+    </div>
+    <p class="hero-tagline">White walls, ancient stone, and a sky so blue it makes everything else look like it's trying too hard.</p>
+  </div>
+  <div class="hero-scroll-line"></div>
+</section>
+
+<section class="intro fade-in">
+  <span class="intro-tag">Visual Essay — Greece</span>
+  <p class="intro-text">"Greece doesn't let you photograph it quietly. The light insists. The color insists. You either surrender to it or you fight it and lose."</p>
+  <p class="intro-body">I wasn't prepared for how physical the light would feel. It's not just bright — it has weight and direction and an opinion. The white walls of Santorini don't just reflect it; they amplify it until every shadow becomes a kind of blue you haven't seen before. I shot more in three days here than in three weeks anywhere else.</p>
+</section>
+
+<div class="divider"></div>
+<div class="palette-strip" style="margin-top:3rem"></div>
+
+<section class="gallery">
+  <div class="gallery-grid">
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a3060"/><stop offset="100%" stop-color="#2a4880"/></linearGradient></defs>
+        <rect width="400" height="300" fill="url(#g1)"/>
+        <rect x="0" y="220" width="400" height="80" fill="#f5f0e8" opacity=".15"/>
+        <text x="200" y="155" text-anchor="middle" font-family="Georgia" font-size="10" fill="#a8c4f0" fill-opacity=".3" letter-spacing="3">SANTORINI</text>
+      </svg>
+      <div class="gallery-item-caption">Blue domes, Oia</div>
+    </div>
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 550" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="550" fill="#162048"/>
+        <rect x="80" y="100" width="240" height="350" rx="4" fill="#1e2e60" opacity=".5"/>
+        <text x="200" y="290" text-anchor="middle" font-family="Georgia" font-size="10" fill="#a8c4f0" fill-opacity=".3" letter-spacing="3">ARCHITECTURE</text>
+      </svg>
+      <div class="gallery-item-caption">White church, Mykonos</div>
+    </div>
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#1a3060"/><stop offset="50%" stop-color="#e8b840"/><stop offset="100%" stop-color="#f4d870"/></linearGradient></defs>
+        <rect width="400" height="400" fill="url(#g2)"/>
+        <text x="200" y="210" text-anchor="middle" font-family="Georgia" font-size="10" fill="#fff" fill-opacity=".2" letter-spacing="3">SUNSET</text>
+      </svg>
+      <div class="gallery-item-caption">Caldera sunset, Santorini</div>
+    </div>
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="300" fill="#1c3870"/>
+        <ellipse cx="200" cy="140" rx="160" ry="80" fill="#243e80" opacity=".5"/>
+        <text x="200" y="152" text-anchor="middle" font-family="Georgia" font-size="10" fill="#a8c4f0" fill-opacity=".3" letter-spacing="3">AEGEAN</text>
+      </svg>
+      <div class="gallery-item-caption">Aegean from a cliff path</div>
+    </div>
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c89030"/><stop offset="60%" stop-color="#e8b840"/><stop offset="100%" stop-color="#2a4880"/></linearGradient></defs>
+        <rect width="400" height="500" fill="url(#g3)" opacity=".6"/>
+        <rect width="400" height="500" fill="#162040" opacity=".5"/>
+        <text x="200" y="265" text-anchor="middle" font-family="Georgia" font-size="10" fill="#a8c4f0" fill-opacity=".3" letter-spacing="3">GOLDEN HOUR</text>
+      </svg>
+      <div class="gallery-item-caption">Ancient ruins at dusk</div>
+    </div>
+    <div class="gallery-item fade-in">
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="300" fill="#182848"/>
+        <path d="M0 200 Q100 160 200 180 Q300 200 400 160 L400 300 L0 300Z" fill="#1e3060" opacity=".5"/>
+        <text x="200" y="155" text-anchor="middle" font-family="Georgia" font-size="10" fill="#a8c4f0" fill-opacity=".3" letter-spacing="3">COAST</text>
+      </svg>
+      <div class="gallery-item-caption">Coastal path, Crete</div>
+    </div>
+  </div>
+</section>
+
+<section class="feature fade-in">
+  <blockquote class="feature-quote">"The shadow of a door frame in Santorini at noon is the most precise blue I have ever seen. I took twelve frames of it. I kept all twelve."</blockquote>
+  <div>
+    <p class="feature-body">Greece has been photographed so many times that it's almost impossible to find an angle that hasn't been done. The challenge wasn't finding something beautiful — it was finding something true. So I looked for the heat, the dust, the tourist-free moments just after sunrise when the cats own the streets and the light is still deciding what it wants to be.</p>
+    <p class="feature-body" style="margin-top:1.5rem">The Acropolis at 7am, with barely anyone there, rewired something in me. You don't fully understand scale in photographs. You have to stand in front of something 2,500 years old to understand what patience really means.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<div class="back-section">
+  <a href="index.html#travel" class="back-link">← Back to all journeys</a>
+</div>
+
+<footer>
+  <span class="footer-txt">Jeremy Elay Srankota — Greece Series</span>
+  <span class="footer-txt">jeresranki@gmail.com</span>
+</footer>
+
+<script>
+const cur = document.getElementById('cur'), curR = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function a(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(a); })();
+document.querySelectorAll('a,.gallery-item').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.classList.add('big'); curR.classList.add('big'); });
+  el.addEventListener('mouseleave', () => { cur.classList.remove('big'); curR.classList.remove('big'); });
+});
+window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60));
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} }), {threshold:.08});
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
