@@ -208,19 +208,6 @@
   <span class="footer-txt">jeresranki@gmail.com</span>
 </footer>
 
-<script>
-const cur = document.getElementById('cur'), curR = document.getElementById('curR');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
-(function a(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(a); })();
-document.querySelectorAll('a,.gallery-item').forEach(el => {
-  el.addEventListener('mouseenter', () => { cur.classList.add('big'); curR.classList.add('big'); });
-  el.addEventListener('mouseleave', () => { cur.classList.remove('big'); curR.classList.remove('big'); });
-});
-window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60));
-const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} }), {threshold:.08});
-document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
-</script>
  <!-- Same lightbox overlay markup on every subpage -->
 <div id="lightboxOverlay" role="dialog" aria-modal="true">
   <button id="lightboxClose">Close ×</button>
