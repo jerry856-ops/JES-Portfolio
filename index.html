@@ -416,8 +416,105 @@
     .divider { margin: 0 2rem; }
     footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem; }
   }
+    /* ── HORIZONTAL SCROLL LOCK ── */
+  #travelSticky {
+    position: relative;
+    /* height set by JS based on scroll content width */
+  }
+  #travelSticky .travel-row {
+    position: sticky;
+    top: 0;
+    overflow: hidden;   /* hide native scroll; JS drives it */
+    scrollbar-width: none;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    will-change: scroll-position;
+  }
+  #travelSticky .travel-row::-webkit-scrollbar { display: none; }
+  
+  /* ── FULLSCREEN LIGHTBOX ── */
+  #lightboxOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(8, 5, 18, 0.96);
+    backdrop-filter: blur(12px);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  #lightboxOverlay.open { display: flex; }
+  
+  #lightboxImg {
+    max-width: 90vw;
+    max-height: 80vh;
+    object-fit: contain;
+    display: block;
+    opacity: 0;
+    transform: scale(0.97);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  #lightboxImg.loaded { opacity: 1; transform: scale(1); }
+  
+  /* For SVG placeholders (until real photos) */
+  #lightboxSVG {
+    max-width: 90vw;
+    max-height: 80vh;
+    display: block;
+    opacity: 0;
+    transform: scale(0.97);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  #lightboxSVG.loaded { opacity: 1; transform: scale(1); }
+  
+  #lightboxClose {
+    position: fixed;
+    top: 2rem; right: 2.5rem;
+    background: none; border: none;
+    color: rgba(240, 236, 255, 0.5);
+    font-family: var(--sans); font-size: .6rem;
+    letter-spacing: .25em; text-transform: uppercase;
+    cursor: none; transition: color 0.25s;
+    z-index: 1001;
+  }
+  #lightboxClose:hover { color: var(--accent2); }
+  
+  #lightboxNav {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  .lb-nav-btn {
+    background: none; border: 1px solid rgba(109,74,255,0.25);
+    color: var(--muted); padding: .6rem 1.4rem;
+    font-family: var(--sans); font-size: .6rem;
+    letter-spacing: .2em; text-transform: uppercase;
+    cursor: none; transition: all 0.25s;
+  }
+  .lb-nav-btn:hover { border-color: var(--accent); color: var(--accent2); }
+  .lb-nav-btn:disabled { opacity: 0.2; pointer-events: none; }
+  
+  #lightboxCaption {
+    margin-top: 1.2rem;
+    font-size: .65rem; letter-spacing: .15em;
+    color: var(--muted); text-align: center;
+    min-height: 1rem;
+  }
 </style>
 </head>
+<!-- LIGHTBOX OVERLAY — shared across all pages -->
+<div id="lightboxOverlay" role="dialog" aria-modal="true">
+  <button id="lightboxClose">Close ×</button>
+  <div id="lightboxSVG"></div>
+  <img id="lightboxImg" src="" alt="">
+  <div id="lightboxNav">
+    <button class="lb-nav-btn" id="lbPrev">← Prev</button>
+    <button class="lb-nav-btn" id="lbNext">Next →</button>
+  </div>
+  <p id="lightboxCaption"></p>
+</div>
 <body>
 
 <div class="cursor" id="cur"></div>
@@ -663,100 +760,101 @@
     </div>
     <p class="travel-intro">Beyond commissions, I follow curiosity. Each country becomes a short visual essay — an attempt to understand a place through its light, texture, and pace.</p>
   </div>
-  <div class="travel-row">
-
-    <!-- JAPAN -->
-    <a class="tcard fade-in" href="travel-japan.html">
-      <div class="tcard-img">
-        <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <defs><linearGradient id="jBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d0f18"/><stop offset="100%" stop-color="#181c2a"/></linearGradient></defs>
-          <rect width="400" height="530" fill="url(#jBg)"/>
-          <ellipse cx="200" cy="260" rx="140" ry="110" fill="#1a1e2e" opacity=".6"/>
-          <!-- Torii gate preview -->
-          <g fill="none" stroke="#bc3a3a" stroke-width="2" opacity=".4" transform="translate(140,140) scale(0.7)">
-            <rect x="0" y="40" width="170" height="8" rx="2"/>
-            <rect x="10" y="20" width="150" height="8" rx="2"/>
-            <rect x="20" y="28" width="4" height="12"/>
-            <rect x="146" y="28" width="4" height="12"/>
-            <rect x="20" y="48" width="4" height="80"/>
-            <rect x="146" y="48" width="4" height="80"/>
-          </g>
-        </svg>
-        <div class="tcard-img-overlay"></div>
-      </div>
-      <div class="tcard-info">
-        <span class="tcard-country">Japan</span>
-        <p class="tcard-desc">Quiet temples, neon alleys, and the space between both.</p>
-        <span class="tcard-link">Explore Series →</span>
-      </div>
-    </a>
-
-    <!-- CROATIA -->
-    <a class="tcard fade-in" href="travel-croatia.html">
-      <div class="tcard-img">
-        <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <defs><linearGradient id="cBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0e1610"/><stop offset="100%" stop-color="#121e14"/></linearGradient></defs>
-          <rect width="400" height="530" fill="url(#cBg)"/>
-          <ellipse cx="200" cy="320" rx="180" ry="60" fill="#162018" opacity=".5"/>
-          <ellipse cx="160" cy="200" rx="70" ry="90" fill="#0e1810" opacity=".6"/>
-          <!-- Wave SVG -->
-          <path d="M20 340 Q80 310 140 340 Q200 370 260 340 Q320 310 380 340" stroke="#4a8fa0" stroke-width="1.5" fill="none" opacity=".35"/>
-          <path d="M20 360 Q80 330 140 360 Q200 390 260 360 Q320 330 380 360" stroke="#4a8fa0" stroke-width="1.5" fill="none" opacity=".25"/>
-        </svg>
-        <div class="tcard-img-overlay"></div>
-      </div>
-      <div class="tcard-info">
-        <span class="tcard-country">Croatia</span>
-        <p class="tcard-desc">Adriatic light, limestone coasts, salt in the air.</p>
-        <span class="tcard-link">Explore Series →</span>
-      </div>
-    </a>
-
-    <!-- GREECE -->
-    <a class="tcard fade-in" href="travel-greece.html">
-      <div class="tcard-img">
-        <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <defs><linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#181208"/><stop offset="100%" stop-color="#201808"/></linearGradient></defs>
-          <rect width="400" height="530" fill="url(#gBg)"/>
-          <ellipse cx="200" cy="250" rx="160" ry="110" fill="#2a1e08" opacity=".5"/>
-          <!-- Sun SVG -->
-          <circle cx="200" cy="200" r="28" fill="none" stroke="#d4a017" stroke-width="1.5" opacity=".3"/>
-          <circle cx="200" cy="200" r="16" fill="#d4a017" opacity=".15"/>
-          <line x1="200" y1="162" x2="200" y2="150" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
-          <line x1="228" y1="172" x2="236" y2="164" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
-          <line x1="238" y1="200" x2="250" y2="200" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
-          <line x1="228" y1="228" x2="236" y2="236" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
-          <line x1="200" y1="238" x2="200" y2="250" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
-          <line x1="172" y1="228" x2="164" y2="236" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
-          <line x1="162" y1="200" x2="150" y2="200" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
-          <line x1="172" y1="172" x2="164" y2="164" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
-        </svg>
-        <div class="tcard-img-overlay"></div>
-      </div>
-      <div class="tcard-info">
-        <span class="tcard-country">Greece</span>
-        <p class="tcard-desc">White walls, ancient light, the color of stone at noon.</p>
-        <span class="tcard-link">Explore Series →</span>
-      </div>
-    </a>
-
-    <!-- COMING SOON -->
-    <a class="tcard fade-in" href="#" style="opacity:.35;pointer-events:none">
-      <div class="tcard-img">
-        <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <rect width="400" height="530" fill="#0c0818"/>
-          <rect x="170" y="210" width="60" height="80" fill="none" stroke="#6d4aff" stroke-opacity=".2" stroke-width="1"/>
-          <line x1="200" y1="230" x2="200" y2="210" stroke="#6d4aff" stroke-opacity=".15" stroke-width="1"/>
-          <text x="200" y="330" text-anchor="middle" font-family="Georgia" font-size="10" fill="#6d4aff" fill-opacity=".2" letter-spacing="3">COMING SOON</text>
-        </svg>
-        <div class="tcard-img-overlay"></div>
-      </div>
-      <div class="tcard-info">
-        <span class="tcard-country" style="color:#2d1b4e">Next</span>
-        <p class="tcard-desc" style="color:#1a1030">Still being discovered...</p>
-      </div>
-    </a>
-
+  <div id="travelSticky">
+    <div class="travel-row" id="ravelRow">
+  
+      <!-- JAPAN -->
+      <a class="tcard fade-in" href="travel-japan.html">
+        <div class="tcard-img">
+          <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <defs><linearGradient id="jBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d0f18"/><stop offset="100%" stop-color="#181c2a"/></linearGradient></defs>
+            <rect width="400" height="530" fill="url(#jBg)"/>
+            <ellipse cx="200" cy="260" rx="140" ry="110" fill="#1a1e2e" opacity=".6"/>
+            <!-- Torii gate preview -->
+            <g fill="none" stroke="#bc3a3a" stroke-width="2" opacity=".4" transform="translate(140,140) scale(0.7)">
+              <rect x="0" y="40" width="170" height="8" rx="2"/>
+              <rect x="10" y="20" width="150" height="8" rx="2"/>
+              <rect x="20" y="28" width="4" height="12"/>
+              <rect x="146" y="28" width="4" height="12"/>
+              <rect x="20" y="48" width="4" height="80"/>
+              <rect x="146" y="48" width="4" height="80"/>
+            </g>
+          </svg>
+          <div class="tcard-img-overlay"></div>
+        </div>
+        <div class="tcard-info">
+          <span class="tcard-country">Japan</span>
+          <p class="tcard-desc">Quiet temples, neon alleys, and the space between both.</p>
+          <span class="tcard-link">Explore Series →</span>
+        </div>
+      </a>
+  
+      <!-- CROATIA -->
+      <a class="tcard fade-in" href="travel-croatia.html">
+        <div class="tcard-img">
+          <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <defs><linearGradient id="cBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0e1610"/><stop offset="100%" stop-color="#121e14"/></linearGradient></defs>
+            <rect width="400" height="530" fill="url(#cBg)"/>
+            <ellipse cx="200" cy="320" rx="180" ry="60" fill="#162018" opacity=".5"/>
+            <ellipse cx="160" cy="200" rx="70" ry="90" fill="#0e1810" opacity=".6"/>
+            <!-- Wave SVG -->
+            <path d="M20 340 Q80 310 140 340 Q200 370 260 340 Q320 310 380 340" stroke="#4a8fa0" stroke-width="1.5" fill="none" opacity=".35"/>
+            <path d="M20 360 Q80 330 140 360 Q200 390 260 360 Q320 330 380 360" stroke="#4a8fa0" stroke-width="1.5" fill="none" opacity=".25"/>
+          </svg>
+          <div class="tcard-img-overlay"></div>
+        </div>
+        <div class="tcard-info">
+          <span class="tcard-country">Croatia</span>
+          <p class="tcard-desc">Adriatic light, limestone coasts, salt in the air.</p>
+          <span class="tcard-link">Explore Series →</span>
+        </div>
+      </a>
+  
+      <!-- GREECE -->
+      <a class="tcard fade-in" href="travel-greece.html">
+        <div class="tcard-img">
+          <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <defs><linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#181208"/><stop offset="100%" stop-color="#201808"/></linearGradient></defs>
+            <rect width="400" height="530" fill="url(#gBg)"/>
+            <ellipse cx="200" cy="250" rx="160" ry="110" fill="#2a1e08" opacity=".5"/>
+            <!-- Sun SVG -->
+            <circle cx="200" cy="200" r="28" fill="none" stroke="#d4a017" stroke-width="1.5" opacity=".3"/>
+            <circle cx="200" cy="200" r="16" fill="#d4a017" opacity=".15"/>
+            <line x1="200" y1="162" x2="200" y2="150" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+            <line x1="228" y1="172" x2="236" y2="164" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+            <line x1="238" y1="200" x2="250" y2="200" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+            <line x1="228" y1="228" x2="236" y2="236" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+            <line x1="200" y1="238" x2="200" y2="250" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+            <line x1="172" y1="228" x2="164" y2="236" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+            <line x1="162" y1="200" x2="150" y2="200" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+            <line x1="172" y1="172" x2="164" y2="164" stroke="#d4a017" stroke-width="1.5" opacity=".25"/>
+          </svg>
+          <div class="tcard-img-overlay"></div>
+        </div>
+        <div class="tcard-info">
+          <span class="tcard-country">Greece</span>
+          <p class="tcard-desc">White walls, ancient light, the color of stone at noon.</p>
+          <span class="tcard-link">Explore Series →</span>
+        </div>
+      </a>
+  
+      <!-- COMING SOON -->
+      <a class="tcard fade-in" href="#" style="opacity:.35;pointer-events:none">
+        <div class="tcard-img">
+          <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="400" height="530" fill="#0c0818"/>
+            <rect x="170" y="210" width="60" height="80" fill="none" stroke="#6d4aff" stroke-opacity=".2" stroke-width="1"/>
+            <line x1="200" y1="230" x2="200" y2="210" stroke="#6d4aff" stroke-opacity=".15" stroke-width="1"/>
+            <text x="200" y="330" text-anchor="middle" font-family="Georgia" font-size="10" fill="#6d4aff" fill-opacity=".2" letter-spacing="3">COMING SOON</text>
+          </svg>
+          <div class="tcard-img-overlay"></div>
+        </div>
+        <div class="tcard-info">
+          <span class="tcard-country" style="color:#2d1b4e">Next</span>
+          <p class="tcard-desc" style="color:#1a1030">Still being discovered...</p>
+        </div>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -802,74 +900,226 @@
 </footer>
 
 <script>
-// Cursor
+/* ── CURSOR ── */
 const cur = document.getElementById('cur');
 const curR = document.getElementById('curR');
 let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
-(function anim() { rx+=(mx-rx)*.12; ry+=(my-ry)*.12; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(anim); })();
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+(function anim(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(anim); })();
 document.querySelectorAll('a,button,.gi,.tcard').forEach(el => {
-  el.addEventListener('mouseenter', () => { cur.classList.add('big'); curR.classList.add('big'); });
-  el.addEventListener('mouseleave', () => { cur.classList.remove('big'); curR.classList.remove('big'); });
+  el.addEventListener('mouseenter', ()=>{ cur.classList.add('big'); curR.classList.add('big'); });
+  el.addEventListener('mouseleave', ()=>{ cur.classList.remove('big'); curR.classList.remove('big'); });
 });
 
-// Nav scroll
+/* ── NAV SCROLL ── */
 window.addEventListener('scroll', () => {
   document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
 });
 
-// Mobile menu
+/* ── MOBILE MENU ── */
 document.getElementById('hamburger').addEventListener('click', () => {
   document.getElementById('navLinks').classList.toggle('open');
 });
-document.querySelectorAll('.nav-links a').forEach(a => {
-  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
-});
+document.querySelectorAll('.nav-links a').forEach(a =>
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'))
+);
 
-// Fade in on scroll
+/* ── FADE IN ON SCROLL ── */
 const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
 }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
 document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 
-// Filters
+/* ── PORTFOLIO FILTERS ── */
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     const cat = btn.dataset.cat;
     document.querySelectorAll('.gi').forEach(gi => {
-      gi.style.display = (cat === 'all' || gi.dataset.cat === cat) ? '' : 'none';
+      gi.style.display = (cat==='all' || gi.dataset.cat===cat) ? '' : 'none';
     });
   });
 });
 
-// Lightbox
-function openLightbox(el) {
-  const svg = el.querySelector('svg').cloneNode(true);
-  svg.style.maxWidth = '80vw';
-  document.getElementById('lightboxContent').innerHTML = '';
-  document.getElementById('lightboxContent').appendChild(svg);
-  document.getElementById('lightbox').classList.add('open');
-}
-function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+/* ══════════════════════════════════════════════
+   LIGHTBOX — reusable, works on all pages
+═══════════════════════════════════════════════ */
+const LightBox = (() => {
+  const overlay   = document.getElementById('lightboxOverlay');
+  const imgEl     = document.getElementById('lightboxImg');
+  const svgEl     = document.getElementById('lightboxSVG');
+  const closeBtn  = document.getElementById('lightboxClose');
+  const prevBtn   = document.getElementById('lbPrev');
+  const nextBtn   = document.getElementById('lbNext');
+  const caption   = document.getElementById('lightboxCaption');
 
-// Contact form
+  let items = [];   // { src, svgHTML, caption }
+  let idx   = 0;
+
+  function show(i) {
+    idx = i;
+    const item = items[idx];
+
+    // reset
+    imgEl.classList.remove('loaded');
+    svgEl.classList.remove('loaded');
+    imgEl.style.display = 'none';
+    svgEl.style.display = 'none';
+    caption.textContent = item.caption || '';
+
+    if (item.src) {
+      imgEl.style.display = 'block';
+      imgEl.onload = () => imgEl.classList.add('loaded');
+      imgEl.src = item.src;
+      if (imgEl.complete) imgEl.classList.add('loaded');
+    } else if (item.svgHTML) {
+      svgEl.style.display = 'block';
+      svgEl.innerHTML = item.svgHTML;
+      requestAnimationFrame(() => svgEl.classList.add('loaded'));
+    }
+
+    prevBtn.disabled = (idx === 0);
+    nextBtn.disabled = (idx === items.length - 1);
+    // hide nav if only one item
+    document.getElementById('lightboxNav').style.display = items.length > 1 ? 'flex' : 'none';
+  }
+
+  function open(collection, startIndex) {
+    items = collection;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    show(startIndex);
+  }
+
+  function close() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    imgEl.src = '';
+    svgEl.innerHTML = '';
+  }
+
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', e => { if(e.target === overlay) close(); });
+  document.addEventListener('keydown', e => {
+    if (!overlay.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowRight' && idx < items.length-1) show(idx+1);
+    if (e.key === 'ArrowLeft'  && idx > 0)              show(idx-1);
+  });
+  prevBtn.addEventListener('click', () => { if(idx>0) show(idx-1); });
+  nextBtn.addEventListener('click', () => { if(idx<items.length-1) show(idx+1); });
+
+  return { open };
+})();
+
+/* ── Wire up portfolio grid items ── */
+(() => {
+  const gridItems = [...document.querySelectorAll('.gi')];
+  const collection = gridItems.map(el => ({
+    svgHTML: el.querySelector('svg')?.outerHTML || '',
+    src:     el.querySelector('img')?.src || '',
+    caption: el.querySelector('.gi-label')?.textContent || '',
+  }));
+  gridItems.forEach((el, i) => {
+    el.style.cursor = 'none';
+    el.addEventListener('click', () => LightBox.open(collection, i));
+  });
+})();
+
+/* ── Wire up travel cards ── */
+(() => {
+  const cards = [...document.querySelectorAll('.tcard')];
+  const collection = cards.map(el => ({
+    svgHTML: el.querySelector('svg')?.outerHTML || '',
+    src:     el.querySelector('img')?.src || '',
+    caption: el.querySelector('.tcard-country')?.textContent || '',
+  }));
+  cards.forEach((el, i) => {
+    el.addEventListener('click', e => {
+      e.preventDefault();   // intercept link nav — open lightbox instead
+      LightBox.open(collection, i);
+    });
+  });
+})();
+
+/* ══════════════════════════════════════════════
+   HORIZONTAL SCROLL LOCK — Travel Section
+   Vertical scroll → horizontal movement inside
+   section. Releases when content end is reached.
+═══════════════════════════════════════════════ */
+(() => {
+  const sticky  = document.getElementById('travelSticky');
+  const row     = document.getElementById('travelRow');
+  if (!sticky || !row) return;
+
+  let raf = null;
+  let targetX = 0;
+  let currentX = 0;
+
+  function setup() {
+    // Make the outer section tall enough to drive the whole horizontal scroll
+    const scrollWidth = row.scrollWidth - window.innerWidth;
+    sticky.style.height = (scrollWidth + window.innerHeight) + 'px';
+  }
+  setup();
+  window.addEventListener('resize', setup);
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function tick() {
+    currentX = lerp(currentX, targetX, 0.1);   // Apple-style ease
+    row.scrollLeft = currentX;
+    if (Math.abs(currentX - targetX) > 0.5) {
+      raf = requestAnimationFrame(tick);
+    } else {
+      currentX = targetX;
+      row.scrollLeft = targetX;
+      raf = null;
+    }
+  }
+
+  window.addEventListener('scroll', () => {
+    const rect     = sticky.getBoundingClientRect();
+    const maxScroll = row.scrollWidth - window.innerWidth;
+
+    // Are we in the sticky zone?
+    if (rect.top <= 0 && rect.bottom >= window.innerHeight) {
+      // Map how far we've scrolled into the section → horizontal position
+      const scrolled = -rect.top;                         // px scrolled into section
+      const total    = sticky.offsetHeight - window.innerHeight;
+      const progress = Math.min(Math.max(scrolled / total, 0), 1);
+      targetX = progress * maxScroll;
+
+      if (!raf) raf = requestAnimationFrame(tick);
+    }
+  }, { passive: true });
+})();
+
+/* ── CONTACT FORM ── */
 document.getElementById('contactForm').addEventListener('submit', async e => {
   e.preventDefault();
   const status = document.getElementById('formStatus');
   status.textContent = 'Sending...';
-  const data = Object.fromEntries(new FormData(e.target));
+  const data = {
+    name:    e.target.name.value,
+    email:   e.target.email.value,
+    message: e.target.message.value,
+  };
   try {
-    const res = await fetch('https://jes-portfolio.jeremyelaysrankota.workers.dev', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+    const res = await fetch('https://jes-portfolio.jeremyelaysrankota.workers.dev/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
     });
-    if (res.ok) { status.textContent = 'Message sent. I\'ll be in touch.'; e.target.reset(); }
-    else { status.textContent = 'Something went wrong. Email me directly.'; }
+    const json = await res.json();
+    status.textContent = res.ok ? "Message sent. I'll be in touch." : 'Something went wrong. Email me directly.';
+    if (res.ok) e.target.reset();
   } catch {
-    status.textContent = 'Network error. Please email jeresranki@gmail.com directly.';
+    status.textContent = 'Network error. Email jeresranki@gmail.com directly.';
   }
 });
 </script>
