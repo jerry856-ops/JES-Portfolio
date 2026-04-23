@@ -504,17 +504,6 @@
   }
 </style>
 </head>
-<!-- LIGHTBOX OVERLAY — shared across all pages -->
-<div id="lightboxOverlay" role="dialog" aria-modal="true">
-  <button id="lightboxClose">Close ×</button>
-  <div id="lightboxSVG"></div>
-  <img id="lightboxImg" src="" alt="">
-  <div id="lightboxNav">
-    <button class="lb-nav-btn" id="lbPrev">← Prev</button>
-    <button class="lb-nav-btn" id="lbNext">Next →</button>
-  </div>
-  <p id="lightboxCaption"></p>
-</div>
 <body>
 
 <div class="cursor" id="cur"></div>
@@ -1123,5 +1112,16 @@ document.getElementById('contactForm').addEventListener('submit', async e => {
   }
 });
 </script>
+  <!-- LIGHTBOX OVERLAY — shared across all pages -->
+<div id="lightboxOverlay" role="dialog" aria-modal="true">
+  <button id="lightboxClose">Close ×</button>
+  <div id="lightboxSVG"></div>
+  <img id="lightboxImg" src="" alt="">
+  <div id="lightboxNav">
+    <button class="lb-nav-btn" id="lbPrev">← Prev</button>
+    <button class="lb-nav-btn" id="lbNext">Next →</button>
+  </div>
+  <p id="lightboxCaption"></p>
+</div>
 </body>
 </html>
