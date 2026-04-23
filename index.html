@@ -204,12 +204,26 @@
   .gi:nth-child(8) { grid-column: span 3; aspect-ratio: 4/5; }
   .gi svg { width: 100%; height: 100%; display: block; transition: transform .8s cubic-bezier(.25,.46,.45,.94); }
   .gi:hover svg { transform: scale(1.06); }
+  /* REPLACE WITH */
   .gi-overlay {
+    position: absolute; inset: 0;
+    opacity: 1;                          /* always visible */
+  }
+  .gi-overlay img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+    display: block;
+    transition: transform .8s cubic-bezier(.25,.46,.45,.94);
+  }
+  .gi:hover .gi-overlay img { transform: scale(1.06); }
+  .gi-overlay::after {                   /* gradient stays hover-only */
+    content: '';
     position: absolute; inset: 0;
     background: linear-gradient(to top, rgba(10,7,20,.85) 0%, transparent 55%);
     opacity: 0; transition: opacity .4s;
   }
-  .gi:hover .gi-overlay { opacity: 1; }
+  .gi:hover .gi-overlay::after { opacity: 1; }
   .gi-label {
     position: absolute; bottom: 1.2rem; left: 1.2rem;
     font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
@@ -502,6 +516,15 @@
     color: var(--muted); text-align: center;
     min-height: 1rem;
   }
+    .about-img-frame img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
+    display: block;
+    transition: transform 1s;
+    z-index: 1;
+  }
+  .about-img-frame:hover img { transform: scale(1.04); }
 </style>
 </head>
 <body>
@@ -674,16 +697,8 @@
 <!-- ABOUT -->
 <section class="about" id="about">
   <div class="about-img fade-in">
-    <div class="about-img-frame">
-      <svg viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg">
-        <defs><radialGradient id="aBg" cx="40%" cy="35%"><stop offset="0%" stop-color="#2d1b4e"/><stop offset="100%" stop-color="#0f0a1f"/></radialGradient></defs>
-        <rect width="400" height="530" fill="url(#aBg)"/>
-        <ellipse cx="190" cy="200" rx="110" ry="140" fill="#1e1038" opacity=".6"/>
-        <rect x="20" y="20" width="360" height="490" fill="none" stroke="#6d4aff" stroke-opacity=".07" stroke-width="1"/>
-        <text x="200" y="280" text-anchor="middle" font-family="Georgia" font-size="11" fill="#9d7fff" fill-opacity=".2" letter-spacing="4">JEREMY</text>
-      </svg>
-    </div>
-    <div class="about-accent"><img src="pics/jeremy.jpg"></div>
+    <div class="about-img-frame"><img src="pics/jeremy.jpg"></div>
+    <div class="about-accent"></div>
     <div class="about-num">16</div>
   </div>
   <div class="fade-in">
@@ -1092,9 +1107,9 @@ document.getElementById('contactForm').addEventListener('submit', async e => {
   const status = document.getElementById('formStatus');
   status.textContent = 'Sending...';
   const data = {
-    name:    e.target.name.value,
-    email:   e.target.email.value,
-    message: e.target.message.value,
+    name:    e.target.elements['name'].value,
+    email:   e.target.elements['email'].value,
+    message: e.target.elements['message'].value,
   };
   try {
     const res = await fetch('https://jes-portfolio.jeremyelaysrankota.workers.dev/contact', {
