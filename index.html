@@ -901,7 +901,19 @@
   <span class="footer-logo">Jeremy Elay Srankota — Lubeník, Slovakia</span>
   <span class="footer-copy">© 2026 — All rights reserved</span>
 </footer>
-
+  
+  <!-- LIGHTBOX OVERLAY — shared across all pages -->
+  <!-- lightbox must be in DOM before script runs -->
+  <div id="lightboxOverlay" role="dialog" aria-modal="true">
+    <button id="lightboxClose">Close ×</button>
+    <div id="lightboxSVG"></div>
+    <img id="lightboxImg" src="" alt="">
+    <div id="lightboxNav">
+      <button class="lb-nav-btn" id="lbPrev">← Prev</button>
+      <button class="lb-nav-btn" id="lbNext">Next →</button>
+    </div>
+    <p id="lightboxCaption"></p>
+  </div>
 <script>
 /* ── CURSOR ── */
 const cur = document.getElementById('cur');
@@ -1126,16 +1138,5 @@ document.getElementById('contactForm').addEventListener('submit', async e => {
   }
 });
 </script>
-  <!-- LIGHTBOX OVERLAY — shared across all pages -->
-<div id="lightboxOverlay" role="dialog" aria-modal="true">
-  <button id="lightboxClose">Close ×</button>
-  <div id="lightboxSVG"></div>
-  <img id="lightboxImg" src="" alt="">
-  <div id="lightboxNav">
-    <button class="lb-nav-btn" id="lbPrev">← Prev</button>
-    <button class="lb-nav-btn" id="lbNext">Next →</button>
-  </div>
-  <p id="lightboxCaption"></p>
-</div>
 </body>
 </html>
