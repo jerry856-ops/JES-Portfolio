@@ -94,17 +94,6 @@
   }
 </style>
 </head>
-<!-- LIGHTBOX OVERLAY — shared across all pages -->
-<div id="lightboxOverlay" role="dialog" aria-modal="true">
-  <button id="lightboxClose">Close ×</button>
-  <div id="lightboxSVG"></div>
-  <img id="lightboxImg" src="" alt="">
-  <div id="lightboxNav">
-    <button class="lb-nav-btn" id="lbPrev">← Prev</button>
-    <button class="lb-nav-btn" id="lbNext">Next →</button>
-  </div>
-  <p id="lightboxCaption"></p>
-</div>
 <body>
 <div class="cursor" id="cur"></div>
 <div class="cursor-ring" id="curR"></div>
@@ -231,6 +220,7 @@ document.querySelectorAll('a,.gallery-item').forEach(el => {
 window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60));
 const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} }), {threshold:.08});
 document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
  <!-- Same lightbox overlay markup on every subpage -->
 <div id="lightboxOverlay" role="dialog" aria-modal="true">
   <button id="lightboxClose">Close ×</button>
@@ -309,7 +299,6 @@ const LightBox = (() => {
   }));
   els.forEach((el,i)=> el.addEventListener('click',()=> LightBox.open(col,i)));
 })();
-</script>
 </script>
 </body>
 </html>
