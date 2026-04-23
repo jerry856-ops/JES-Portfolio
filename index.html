@@ -1099,7 +1099,7 @@ document.getElementById('contactForm').addEventListener('submit', async e => {
     message: e.target.message.value,
   };
   try {
-    const res = await fetch('https://jes-portfolio.jeremyelaysrankota.workers.dev/send', {
+    const res = await fetch('https://jes-portfolio.jeremyelaysrankota.workers.dev/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
