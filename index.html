@@ -1045,22 +1045,6 @@ const LightBox = (() => {
   });
 })();
 
-/* ── Wire up travel cards ── */
-(() => {
-  const cards = [...document.querySelectorAll('.tcard')];
-  const collection = cards.map(el => ({
-    svgHTML: el.querySelector('svg')?.outerHTML || '',
-    src:     el.querySelector('img')?.src || '',
-    caption: el.querySelector('.tcard-country')?.textContent || '',
-  }));
-  cards.forEach((el, i) => {
-    el.addEventListener('click', e => {
-      e.preventDefault();   // intercept link nav — open lightbox instead
-      LightBox.open(collection, i);
-    });
-  });
-})();
-
 /* ══════════════════════════════════════════════
    HORIZONTAL SCROLL LOCK — Travel Section
    Vertical scroll → horizontal movement inside
