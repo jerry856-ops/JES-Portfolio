@@ -281,5 +281,84 @@ window.addEventListener('scroll', () => document.getElementById('nav').classList
 const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} }), {threshold:.08});
 document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 </script>
+ <!-- Same lightbox overlay markup on every subpage -->
+<div id="lightboxOverlay" role="dialog" aria-modal="true">
+  <button id="lightboxClose">Close ×</button>
+  <div id="lightboxSVG"></div>
+  <img id="lightboxImg" src="" alt="">
+  <div id="lightboxNav">
+    <button class="lb-nav-btn" id="lbPrev">← Prev</button>
+    <button class="lb-nav-btn" id="lbNext">Next →</button>
+  </div>
+  <p id="lightboxCaption"></p>
+</div>
+
+<script>
+/* cursor */
+const cur = document.getElementById('cur'), curR = document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function a(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(a); })();
+document.querySelectorAll('a,.gallery-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ cur.classList.add('big'); curR.classList.add('big'); });
+  el.addEventListener('mouseleave',()=>{ cur.classList.remove('big'); curR.classList.remove('big'); });
+});
+window.addEventListener('scroll',()=> document.getElementById('nav').classList.toggle('scrolled', window.scrollY>60));
+const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:.08});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+
+/* lightbox */
+const LightBox = (() => {
+  const overlay  = document.getElementById('lightboxOverlay');
+  const imgEl    = document.getElementById('lightboxImg');
+  const svgEl    = document.getElementById('lightboxSVG');
+  const closeBtn = document.getElementById('lightboxClose');
+  const prevBtn  = document.getElementById('lbPrev');
+  const nextBtn  = document.getElementById('lbNext');
+  const caption  = document.getElementById('lightboxCaption');
+  let items=[], idx=0;
+
+  function show(i) {
+    idx=i; const item=items[idx];
+    imgEl.classList.remove('loaded'); svgEl.classList.remove('loaded');
+    imgEl.style.display='none'; svgEl.style.display='none';
+    caption.textContent = item.caption||'';
+    if (item.src) {
+      imgEl.style.display='block'; imgEl.onload=()=>imgEl.classList.add('loaded');
+      imgEl.src=item.src; if(imgEl.complete) imgEl.classList.add('loaded');
+    } else if (item.svgHTML) {
+      svgEl.style.display='block'; svgEl.innerHTML=item.svgHTML;
+      requestAnimationFrame(()=>svgEl.classList.add('loaded'));
+    }
+    prevBtn.disabled=(idx===0); nextBtn.disabled=(idx===items.length-1);
+    document.getElementById('lightboxNav').style.display=items.length>1?'flex':'none';
+  }
+  function open(col, start){ items=col; overlay.classList.add('open'); document.body.style.overflow='hidden'; show(start); }
+  function close(){ overlay.classList.remove('open'); document.body.style.overflow=''; imgEl.src=''; svgEl.innerHTML=''; }
+
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
+  document.addEventListener('keydown', e=>{
+    if(!overlay.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    if(e.key==='ArrowRight' && idx<items.length-1) show(idx+1);
+    if(e.key==='ArrowLeft'  && idx>0)              show(idx-1);
+  });
+  prevBtn.addEventListener('click',()=>{ if(idx>0) show(idx-1); });
+  nextBtn.addEventListener('click',()=>{ if(idx<items.length-1) show(idx+1); });
+  return { open };
+})();
+
+/* wire gallery items */
+(() => {
+  const els = [...document.querySelectorAll('.gallery-item')];
+  const col = els.map(el=>({
+    svgHTML: el.querySelector('svg')?.outerHTML||'',
+    src:     el.querySelector('img')?.src||'',
+    caption: el.querySelector('.gallery-item-caption')?.textContent||'',
+  }));
+  els.forEach((el,i)=> el.addEventListener('click',()=> LightBox.open(col,i)));
+})();
+</script>
 </body>
 </html>
